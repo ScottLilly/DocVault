@@ -3,13 +3,189 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DocVault.WPF"
+        xmlns:viewModels="clr-namespace:DocVault.ViewModels;assembly=DocVault.ViewModels"
         mc:Ignorable="d"
-        Title="DocVault"
-        Height="450" Width="800">
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+        FontSize="11pt"
+        WindowStartupLocation="CenterScreen"
+        Title="DocVault" Height="768" Width="1024">
+
+    <Window.Resources>
+        <Style x:Key="RightAlignCell" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+        <Style x:Key="CenterAlignColumnHeader" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <!-- Menu -->
+        <Menu Grid.Row="0" Grid.Column="0"
+              FontSize="11pt">
+            <MenuItem Header="File">
+                <MenuItem Header="Exit"
+                          Click="Exit_OnClick"/>
+            </MenuItem>
+            
+            <MenuItem Header="Documents">
+                <MenuItem Header="Enter encryption key"
+                          Click="EnterEncryptionKey_OnClick"/>
+                <Separator/>
+                <MenuItem Header="Store Document(s)..."
+                          Click="StoreDocument_OnClick"
+                          IsEnabled="{Binding HasEncryptionKey}"/>
+                <MenuItem Header="Retrieve Document(s)..."
+                          Click="RetrieveDocuments_OnClick"
+                          IsEnabled="{Binding HasEncryptionKey}"/>
+            </MenuItem>
+
+            <MenuItem Header="Help">
+                <MenuItem Header="View Help"
+                          Click="ViewHelp_OnClick"/>
+                <Separator/>
+                <MenuItem Header="About DocVault"
+                          Click="AboutDocVault_OnClick"/>
+            </MenuItem>
+        </Menu>
+        
+        <!-- Main workspace -->
+        <Grid Grid.Row="1" Grid.Column="0"
+              Margin="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Documents to store -->
+            <GroupBox Grid.Row="0" Grid.Column="0" 
+                    BorderBrush="#FF000000" BorderThickness="1"
+                    Header="Documents to store">
+                <DataGrid ItemsSource="{Binding DocumentsToStore}"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          VerticalScrollBarVisibility="Auto"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File name"
+                                            Binding="{Binding OriginalName}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Created on"
+                                            HeaderStyle="{StaticResource CenterAlignColumnHeader}"
+                                            Binding="{Binding CreatedDateTime, StringFormat='{}{0:yyyy-mm-dd HH:mm}'}"/>
+                        <DataGridTextColumn Header="File size"
+                                            HeaderStyle="{StaticResource CenterAlignColumnHeader}"
+                                            Width="125"
+                                            Binding="{Binding FileSize, StringFormat={}{0:n0}}"
+                                            ElementStyle="{StaticResource RightAlignCell}"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Documents that match -->
+            <GroupBox Grid.Row="1" Grid.Column="0" 
+                      BorderBrush="#FF000000" BorderThickness="1"
+                      Header="Documents that match">
+                <DataGrid ItemsSource="{Binding DocumentsThatMatch}"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          VerticalScrollBarVisibility="Auto"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False">
+
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Exclude from storing" 
+                                      Click="ExcludeMatchingDocument_OnClick"/>
+                            <MenuItem Header="Delete document from local disk" 
+                                      Click="DeleteMatchingDocument_OnClick"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File name"
+                                            Binding="{Binding OriginalName}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Created on"
+                                            HeaderStyle="{StaticResource CenterAlignColumnHeader}"
+                                            Binding="{Binding CreatedDateTime, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"/>
+                        <DataGridTextColumn Header="File size"
+                                            HeaderStyle="{StaticResource CenterAlignColumnHeader}"
+                                            Width="125"
+                                            Binding="{Binding FileSize, StringFormat={}{0:n0}}"
+                                            ElementStyle="{StaticResource RightAlignCell}"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Documents already in storage -->
+            <GroupBox Grid.Row="2" Grid.Column="0" 
+                      BorderBrush="#FF000000" BorderThickness="1"
+                      Header="Documents already in storage">
+                <DataGrid ItemsSource="{Binding DocumentsAlreadyInStorage}"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          VerticalScrollBarVisibility="Auto"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False">
+
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete document from local disk" 
+                                      Click="DeleteMatchingDocument_OnClick"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File name"
+                                            Binding="{Binding OriginalName}"/>
+                        <DataGridTextColumn Header="Stored on"
+                                            HeaderStyle="{StaticResource CenterAlignColumnHeader}"
+                                            Binding="{Binding CreatedDateTime, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"/>
+                        <DataGridTextColumn Header="Tags"
+                                            Binding="{Binding TagList}"
+                                            Width="*"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="3" Grid.Column="0" 
+                    BorderBrush="#FF000000" BorderThickness="1"
+                    Header="Tags">
+                <TextBox Height="42"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Disabled"
+                         Text="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"/>
+            </GroupBox>
+
+            <Button Grid.Row="4" Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0"
+                    Width="175"
+                    Content="Store documents"
+                    Click="StoreDocuments_OnClickAsync"/>
+        </Grid>
 
     </Grid>
 

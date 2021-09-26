@@ -1,9 +1,12 @@
 ﻿<Application x:Class="DocVault.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DocVault.WPF"
+             xmlns:customConverters="clr-namespace:DocVault.WPF.CustomConverters"
              StartupUri="MainWindow.xaml">
+
     <Application.Resources>
-         
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <customConverters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
     </Application.Resources>
+
 </Application>

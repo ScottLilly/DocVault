@@ -1,0 +1,11 @@
+﻿This program expects the following values in the user secrets or appsettings:
+
+{
+  "ConnectionStrings": {
+    "SqlDatabase": "",
+    "BlobStorage": ""
+  },
+  "Keys": {
+    "BlobStorage": ""
+  } 
+}
