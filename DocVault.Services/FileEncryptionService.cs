@@ -11,10 +11,10 @@ namespace DocVault.Services
 {
     public sealed class FileEncryptionService : INotifyPropertyChanged
     {
-        private const string ENCRYPTED_FILE_LOCATION = @"D:\Encrypt\";
-        private const string DECRYPTED_FILE_LOCATION = @"D:\Decrypt\";
+        private const string ENCRYPTED_FILE_LOCATION = @"E:\Encrypt\";
+        private const string DECRYPTED_FILE_LOCATION = @"E:\Decrypt\";
 
-        private readonly RSACryptoServiceProvider s_rsaCryptoServiceProvider =
+        private static readonly RSACryptoServiceProvider s_rsaCryptoServiceProvider =
             new RSACryptoServiceProvider();
 
         private readonly string _blobConnectionString;
