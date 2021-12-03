@@ -11,10 +11,7 @@ namespace DocVault.Services
 {
     public sealed class FileEncryptionService : INotifyPropertyChanged
     {
-        private UserSettings _userSettings;
-
-        private string ENCRYPTED_FILE_LOCATION => _userSettings.EncryptedStorageLocation.URI;
-        private const string DECRYPTED_FILE_LOCATION = @"E:\Decrypt\";
+        private readonly UserSettings _userSettings;
 
         private static readonly RSACryptoServiceProvider s_rsaCryptoServiceProvider =
             new RSACryptoServiceProvider();
@@ -78,13 +75,13 @@ namespace DocVault.Services
             // - the IV
             // - the encrypted cipher content
 
-            if (!Directory.Exists(ENCRYPTED_FILE_LOCATION))
+            if (!Directory.Exists(_userSettings.EncryptedStorageLocation.URI))
             {
-                Directory.CreateDirectory(ENCRYPTED_FILE_LOCATION);
+                Directory.CreateDirectory(_userSettings.EncryptedStorageLocation.URI);
             }
 
             string outputFileName =
-                Path.Combine(ENCRYPTED_FILE_LOCATION, document.NameInStorage);
+                Path.Combine(_userSettings.EncryptedStorageLocation.URI, document.NameInStorage);
 
             await using FileStream outputFileStream =
                 new(outputFileName, FileMode.Create);
@@ -153,7 +150,7 @@ namespace DocVault.Services
             aes.IV = _aesIV;
 
             using FileStream inputFileStream =
-                new(ENCRYPTED_FILE_LOCATION + document.NameInStorage, FileMode.Open);
+                new(Path.Combine(_userSettings.EncryptedStorageLocation.URI, document.NameInStorage), FileMode.Open);
 
             // Create byte arrays to get the length of the encrypted key and IV.
             // These values were stored as 4 bytes each at the beginning of the encrypted file.
@@ -181,7 +178,7 @@ namespace DocVault.Services
             inputFileStream.Seek(8 + lengthKey, SeekOrigin.Begin);
             inputFileStream.Read(iv, 0, lengthIV);
 
-            Directory.CreateDirectory(DECRYPTED_FILE_LOCATION);
+            Directory.CreateDirectory(_userSettings.DecryptedStorageLocation.URI);
 
             // Use RSACryptoServiceProvider to decrypt the AES key.
             byte[] decryptedKey = s_rsaCryptoServiceProvider.Decrypt(encryptionKey, false);
@@ -192,7 +189,7 @@ namespace DocVault.Services
             // Decrypt the cipher text from from the encrypted file stream (inputFileStream)
             // into the decrypted file stream (outputFileStream).
             string decryptedFileName =
-                Path.Combine(DECRYPTED_FILE_LOCATION, document.OriginalName);
+                Path.Combine(_userSettings.DecryptedStorageLocation.URI, document.OriginalName);
 
             using (FileStream outputFileStream = new(decryptedFileName, FileMode.Create))
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.WebSockets;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,9 +11,6 @@ using DocVault.WPF.Windows;
 
 namespace DocVault.WPF
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private const string USER_SETTINGS_FILE_NAME = "UserSettings.json";
@@ -46,14 +42,46 @@ namespace DocVault.WPF
             services.AddDbContext<DocVaultDbContext>
                 (options => options.UseSqlServer(_configuration.GetConnectionString("SqlDatabase")));
 
-            var settingsManager = new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME);
-            var userSettings = settingsManager.LoadSettings();
+            var userSettings = GetUserSettings();
 
             services.AddSingleton(new FileEncryptionService(userSettings));
 
             services.AddTransient(typeof(EncryptionKeyEntryWindow));
-            services.AddTransient(typeof(MainWindow));
+            services.AddTransient(f => new MainWindow(userSettings, 
+                f.GetRequiredService<IServiceProvider>(), 
+                f.GetRequiredService<DocVaultDbContext>(), 
+                f.GetRequiredService<FileEncryptionService>()));
             services.AddTransient(typeof(AboutWindow));
+        }
+
+        private UserSettings GetUserSettings()
+        {
+            var settingsManager = 
+                new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME);
+
+            if (File.Exists(USER_SETTINGS_FILE_NAME))
+            {
+                 return settingsManager.LoadSettings();
+            }
+
+            // TODO: Choose better default locations
+            var userSettings = new UserSettings
+            {
+                EncryptedStorageLocation = new StorageLocation
+                {
+                    Type = StorageLocation.LocationType.LocalDisk,
+                    URI = @"\EncryptedDocuments"
+                },
+                DecryptedStorageLocation = new StorageLocation
+                {
+                    Type = StorageLocation.LocationType.LocalDisk,
+                    URI = @"\DecryptedDocuments"
+                }
+            };
+
+            settingsManager.SaveSettings(userSettings);
+
+            return userSettings;
         }
     }
 }

@@ -14,47 +14,21 @@ namespace DocVault.WPF
 {
     public partial class MainWindow : Window
     {
-        private const string USER_SETTINGS_FILE_NAME = "UserSettings.json";
-
         private readonly IServiceProvider _serviceProvider;
-        private SettingsManager<UserSettings> _settingsManager;
-        private UserSettings _userSettings;
 
         private MainWindowViewModel VM =>
             DataContext as MainWindowViewModel;
         
-        public MainWindow(IServiceProvider serviceProvider,
-                          DocVaultDbContext dbContext,
-                          FileEncryptionService fileEncryptionService)
+        public MainWindow(UserSettings userSettings,
+            IServiceProvider serviceProvider,
+            DocVaultDbContext dbContext,
+            FileEncryptionService fileEncryptionService)
         {
             InitializeComponent();
 
-            LoadUserSettings();
-
             _serviceProvider = serviceProvider;
 
-            DataContext = new MainWindowViewModel(_userSettings, dbContext, fileEncryptionService);
-        }
-
-        private void LoadUserSettings()
-        {
-            _settingsManager = new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME);
-
-            if (File.Exists(USER_SETTINGS_FILE_NAME))
-            {
-                _userSettings = _settingsManager.LoadSettings();
-            }
-            else
-            {
-                _userSettings = new UserSettings();
-                _userSettings.EncryptedStorageLocation = new StorageLocation
-                    {
-                        Type = StorageLocation.LocationType.LocalDisk, 
-                        URI = @"E:\EncryptedDocuments"
-                    };
-
-                _settingsManager.SaveSettings(_userSettings);
-            }
+            DataContext = new MainWindowViewModel(userSettings, dbContext, fileEncryptionService);
         }
 
         private void EnterEncryptionKey_OnClick(object sender, RoutedEventArgs e)
@@ -92,7 +66,7 @@ namespace DocVault.WPF
 
         private void AboutDocVault_OnClick(object sender, RoutedEventArgs e)
         {
-            AboutWindow aboutWindow = 
+            AboutWindow aboutWindow =
                 _serviceProvider.GetRequiredService<AboutWindow>();
             aboutWindow.Owner = this;
 
