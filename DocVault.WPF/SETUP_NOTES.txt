@@ -2,10 +2,6 @@
 
 {
   "ConnectionStrings": {
-    "SqlDatabase": "",
-    "BlobStorage": ""
-  },
-  "Keys": {
-    "BlobStorage": ""
+    "SqlDatabase": ""
   } 
 }

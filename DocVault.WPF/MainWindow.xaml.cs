@@ -14,8 +14,13 @@ namespace DocVault.WPF
 {
     public partial class MainWindow : Window
     {
-        private IServiceProvider _serviceProvider { get; set; }
-        private MainWindowViewModel VM => 
+        private const string USER_SETTINGS_FILE_NAME = "UserSettings.json";
+
+        private readonly IServiceProvider _serviceProvider;
+        private SettingsManager<UserSettings> _settingsManager;
+        private UserSettings _userSettings;
+
+        private MainWindowViewModel VM =>
             DataContext as MainWindowViewModel;
         
         public MainWindow(IServiceProvider serviceProvider,
@@ -24,10 +29,27 @@ namespace DocVault.WPF
         {
             InitializeComponent();
 
+            LoadUserSettings();
+
             _serviceProvider = serviceProvider;
 
             DataContext = new MainWindowViewModel(dbContext, 
                                                   fileEncryptionService);
+        }
+
+        private void LoadUserSettings()
+        {
+            _settingsManager = new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME);
+
+            if (File.Exists(USER_SETTINGS_FILE_NAME))
+            {
+                _userSettings = _settingsManager.LoadSettings();
+            }
+            else
+            {
+                _userSettings = new UserSettings();
+                _settingsManager.SaveSettings(_userSettings);
+            }
         }
 
         private void EnterEncryptionKey_OnClick(object sender, RoutedEventArgs e)

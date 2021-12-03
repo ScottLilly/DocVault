@@ -24,8 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DocVault.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DocVault.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DocVault.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DocVault.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
