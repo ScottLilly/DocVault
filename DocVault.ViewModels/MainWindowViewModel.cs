@@ -14,6 +14,7 @@ namespace DocVault.ViewModels
 {
     public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
+        private readonly UserSettings _userSettings;
         private readonly DocVaultDbContext _dbContext;
         private readonly FileEncryptionService _fileEncryptionService;
 
@@ -37,9 +38,11 @@ namespace DocVault.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainWindowViewModel(DocVaultDbContext dbContext,
+        public MainWindowViewModel(UserSettings userSettings,
+                                    DocVaultDbContext dbContext,
                                    FileEncryptionService fileEncryptionService)
         {
+            _userSettings = userSettings;
             _dbContext = dbContext;
             _fileEncryptionService = fileEncryptionService;
 

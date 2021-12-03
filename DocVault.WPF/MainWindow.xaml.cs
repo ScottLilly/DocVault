@@ -33,8 +33,7 @@ namespace DocVault.WPF
 
             _serviceProvider = serviceProvider;
 
-            DataContext = new MainWindowViewModel(dbContext, 
-                                                  fileEncryptionService);
+            DataContext = new MainWindowViewModel(_userSettings, dbContext, fileEncryptionService);
         }
 
         private void LoadUserSettings()
@@ -48,6 +47,12 @@ namespace DocVault.WPF
             else
             {
                 _userSettings = new UserSettings();
+                _userSettings.EncryptedStorageLocation = new StorageLocation
+                    {
+                        Type = StorageLocation.LocationType.LocalDisk, 
+                        URI = @"E:\EncryptedDocuments"
+                    };
+
                 _settingsManager.SaveSettings(_userSettings);
             }
         }

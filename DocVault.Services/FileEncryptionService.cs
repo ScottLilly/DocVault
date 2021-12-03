@@ -11,15 +11,14 @@ namespace DocVault.Services
 {
     public sealed class FileEncryptionService : INotifyPropertyChanged
     {
-        private const string ENCRYPTED_FILE_LOCATION = @"E:\Encrypt\";
+        private UserSettings _userSettings;
+
+        private string ENCRYPTED_FILE_LOCATION => _userSettings.EncryptedStorageLocation.URI;
         private const string DECRYPTED_FILE_LOCATION = @"E:\Decrypt\";
 
         private static readonly RSACryptoServiceProvider s_rsaCryptoServiceProvider =
             new RSACryptoServiceProvider();
 
-        private readonly string _blobConnectionString;
-        private readonly string _blobKey;
-        private readonly string _containerName;
         private byte[] _aesKey;
         private byte[] _aesIV;
 
@@ -37,11 +36,9 @@ namespace DocVault.Services
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public FileEncryptionService(string blobConnectionString, string blobKey, string containerName)
+        public FileEncryptionService(UserSettings userSettings)
         {
-            _blobConnectionString = blobConnectionString;
-            _blobKey = blobKey;
-            _containerName = containerName;
+            _userSettings = userSettings;
         }
 
         public void SetUserEncryptionKey(string encryptionKey)
@@ -80,6 +77,11 @@ namespace DocVault.Services
             // - encrypted key
             // - the IV
             // - the encrypted cipher content
+
+            if (!Directory.Exists(ENCRYPTED_FILE_LOCATION))
+            {
+                Directory.CreateDirectory(ENCRYPTED_FILE_LOCATION);
+            }
 
             string outputFileName =
                 Path.Combine(ENCRYPTED_FILE_LOCATION, document.NameInStorage);
