@@ -47,14 +47,8 @@ namespace DocVault.WPF
             services.AddSingleton(new FileEncryptionService(userSettings));
 
             services.AddTransient(typeof(EncryptionKeyEntryWindow));
-            services.AddTransient(f => new MainWindow(userSettings, 
-                f.GetRequiredService<IServiceProvider>(), 
-                f.GetRequiredService<DocVaultDbContext>(), 
-                f.GetRequiredService<FileEncryptionService>()));
-            services.AddTransient(f => new DocumentsToDecrypt(userSettings,
-                f.GetRequiredService<IServiceProvider>(),
-                f.GetRequiredService<DocVaultDbContext>(),
-                f.GetRequiredService<FileEncryptionService>()));
+            services.AddTransient(typeof(MainWindow));
+            services.AddTransient(typeof(DocumentsToDecrypt));
             services.AddTransient(typeof(AboutWindow));
         }
 

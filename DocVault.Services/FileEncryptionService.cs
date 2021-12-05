@@ -178,7 +178,10 @@ namespace DocVault.Services
             inputFileStream.Seek(8 + lengthKey, SeekOrigin.Begin);
             inputFileStream.Read(iv, 0, lengthIV);
 
-            Directory.CreateDirectory(_userSettings.DecryptedStorageLocation.URI);
+            if (!Directory.Exists(_userSettings.DecryptedStorageLocation.URI))
+            {
+                Directory.CreateDirectory(_userSettings.DecryptedStorageLocation.URI);
+            }
 
             // Use RSACryptoServiceProvider to decrypt the AES key.
             byte[] decryptedKey = s_rsaCryptoServiceProvider.Decrypt(encryptionKey, false);

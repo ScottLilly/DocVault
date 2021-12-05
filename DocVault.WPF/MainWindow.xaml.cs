@@ -19,8 +19,7 @@ namespace DocVault.WPF
         private MainWindowViewModel VM =>
             DataContext as MainWindowViewModel;
         
-        public MainWindow(UserSettings userSettings,
-            IServiceProvider serviceProvider,
+        public MainWindow(IServiceProvider serviceProvider,
             DocVaultDbContext dbContext,
             FileEncryptionService fileEncryptionService)
         {

@@ -91,7 +91,8 @@
         <Button Grid.Row="4" Grid.Column="0"
                 HorizontalAlignment="Left"
                 Width="100"
-                Content="Decrypt"/>
+                Content="Decrypt"
+                Click="DecryptSelectedDocuments_OnClick"/>
 
         <Button Grid.Row="4" Grid.Column="1"
                 HorizontalAlignment="Right"

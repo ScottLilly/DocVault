@@ -54,6 +54,16 @@ namespace DocVault.ViewModels
             }
         }
 
+        public void DecryptSelectedDocuments()
+        {
+            foreach (DocumentSelection documentSelection in DocumentSelections.Where(ds => ds.IsSelected))
+            {
+                _fileEncryptionService.DecryptDocument(documentSelection.Document);
+            }
+
+            DocumentSelections.Clear();
+        }
+
         private void PopulateTagSelections()
         {
             TagSelections.Clear();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using DocVault.DAL;
-using DocVault.Models;
 using DocVault.Services;
 using DocVault.ViewModels;
 
@@ -13,8 +12,7 @@ namespace DocVault.WPF.Windows
 
         private DecryptWindowViewModel VM => DataContext as DecryptWindowViewModel;
 
-        public DocumentsToDecrypt(UserSettings userSettings,
-            IServiceProvider serviceProvider,
+        public DocumentsToDecrypt(IServiceProvider serviceProvider,
             DocVaultDbContext dbContext,
             FileEncryptionService fileEncryptionService)
         {
@@ -28,6 +26,11 @@ namespace DocVault.WPF.Windows
         private void FindMatchingDocuments_OnClick(object sender, RoutedEventArgs e)
         {
             VM.FindMatchingDocuments();
+        }
+
+        private void DecryptSelectedDocuments_OnClick(object sender, RoutedEventArgs e)
+        {
+            VM.DecryptSelectedDocuments();
         }
 
         private void Close_OnClick(object sender, RoutedEventArgs e)
