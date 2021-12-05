@@ -20,7 +20,12 @@ namespace DocVault.WPF.Windows
 
             _serviceProvider = serviceProvider;
 
-            DataContext = new MainWindowViewModel(dbContext, fileEncryptionService);
+            DataContext = new DecryptWindowViewModel(dbContext, fileEncryptionService);
+        }
+
+        private void Close_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

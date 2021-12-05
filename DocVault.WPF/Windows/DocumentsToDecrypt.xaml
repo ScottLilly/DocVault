@@ -4,13 +4,74 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DocVault.WPF.Windows"
+        xmlns:viewModels="clr-namespace:DocVault.ViewModels;assembly=DocVault.ViewModels"
+        d:DataContext="{d:DesignInstance viewModels:DecryptWindowViewModel}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="DocumentsToDecrypt" 
+        FontSize="11pt"
+        Title="Documents to Decrypt" 
         Height="450" Width="800">
 
-    <Grid>
-        
+    <Grid Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" 
+                  Grid.ColumnSpan="2"
+                  BorderBrush="#FF000000" BorderThickness="1"
+                  Header="Tags">
+
+            <DataGrid ItemsSource="{Binding TagSelections}"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      VerticalScrollBarVisibility="Auto"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Tag name"
+                                        Binding="{Binding Tag.Value}"
+                                        Width="*"/>
+
+                    <DataGridCheckBoxColumn Header="Include"
+                                            Binding="{Binding IsSelected}"
+                                            IsThreeState="False"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" 
+                  Grid.ColumnSpan="2"
+                  BorderBrush="#FF000000" BorderThickness="1"
+                  Header="Documents">
+
+            <DataGrid>
+
+            </DataGrid>
+
+        </GroupBox>
+
+        <Button Grid.Row="3" Grid.Column="0"
+                HorizontalAlignment="Left"
+                Width="100"
+                Content="Decrypt"/>
+
+        <Button Grid.Row="3" Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="100"
+                Content="Close"
+                Click="Close_OnClick"/>
+
     </Grid>
 
 </Window>
