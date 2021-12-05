@@ -51,6 +51,10 @@ namespace DocVault.WPF
                 f.GetRequiredService<IServiceProvider>(), 
                 f.GetRequiredService<DocVaultDbContext>(), 
                 f.GetRequiredService<FileEncryptionService>()));
+            services.AddTransient(f => new DocumentsToDecrypt(userSettings,
+                f.GetRequiredService<IServiceProvider>(),
+                f.GetRequiredService<DocVaultDbContext>(),
+                f.GetRequiredService<FileEncryptionService>()));
             services.AddTransient(typeof(AboutWindow));
         }
 

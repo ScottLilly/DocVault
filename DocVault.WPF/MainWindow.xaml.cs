@@ -53,6 +53,9 @@ namespace DocVault.WPF
 
         private void RetrieveDocuments_OnClick(object sender, RoutedEventArgs e)
         {
+            var decryptWindow = _serviceProvider.GetRequiredService<DocumentsToDecrypt>();
+            decryptWindow.Owner = this;
+            decryptWindow.ShowDialog();
         }
 
         private async void StoreDocuments_OnClickAsync(object sender, RoutedEventArgs e)
