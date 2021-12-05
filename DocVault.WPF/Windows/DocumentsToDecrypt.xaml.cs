@@ -11,6 +11,8 @@ namespace DocVault.WPF.Windows
     {
         private readonly IServiceProvider _serviceProvider;
 
+        private DecryptWindowViewModel VM => DataContext as DecryptWindowViewModel;
+
         public DocumentsToDecrypt(UserSettings userSettings,
             IServiceProvider serviceProvider,
             DocVaultDbContext dbContext,
@@ -21,6 +23,11 @@ namespace DocVault.WPF.Windows
             _serviceProvider = serviceProvider;
 
             DataContext = new DecryptWindowViewModel(dbContext, fileEncryptionService);
+        }
+
+        private void FindMatchingDocuments_OnClick(object sender, RoutedEventArgs e)
+        {
+            VM.FindMatchingDocuments();
         }
 
         private void Close_OnClick(object sender, RoutedEventArgs e)

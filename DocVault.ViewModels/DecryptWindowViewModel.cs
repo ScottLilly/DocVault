@@ -1,9 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using DocVault.DAL;
 using DocVault.Models;
 using DocVault.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace DocVault.ViewModels
 {
@@ -16,6 +19,8 @@ namespace DocVault.ViewModels
 
         public ObservableCollection<TagSelection> TagSelections { get; } =
             new ObservableCollection<TagSelection>();
+        public ObservableCollection<DocumentSelection> DocumentSelections { get; } =
+            new ObservableCollection<DocumentSelection>();
 
         public DecryptWindowViewModel(DocVaultDbContext dbContext,
             FileEncryptionService fileEncryptionService)
@@ -24,6 +29,29 @@ namespace DocVault.ViewModels
             _fileEncryptionService = fileEncryptionService;
 
             PopulateTagSelections();
+        }
+
+        public void FindMatchingDocuments()
+        {
+            DocumentSelections.Clear();
+
+            foreach (var tagSelection in TagSelections.Where(ts => ts.IsSelected))
+            {
+                var matchingDocs = 
+                    _dbContext.Documents.Include(d => d.Tags)
+                        .ToList().Where(d => d.Tags.Contains(tagSelection.Tag));
+
+                foreach (Document document in matchingDocs)
+                {
+                    if (!DocumentSelections.Any(ds => ds.Document.Id.Equals(document.Id)))
+                    {
+                        DocumentSelections.Add(new DocumentSelection
+                        {
+                            Document = document, IsSelected = false
+                        });
+                    }
+                }
+            }
         }
 
         private void PopulateTagSelections()
