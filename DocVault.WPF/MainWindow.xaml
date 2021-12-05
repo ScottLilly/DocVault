@@ -104,7 +104,7 @@
             <GroupBox Grid.Row="1" Grid.Column="0" 
                       BorderBrush="#FF000000" BorderThickness="1"
                       Header="Documents that match">
-                <DataGrid ItemsSource="{Binding DocumentsThatMatch}"
+                <DataGrid ItemsSource="{Binding DocumentsToEncryptThatMatch}"
                           AutoGenerateColumns="False"
                           HeadersVisibility="Column"
                           VerticalScrollBarVisibility="Auto"

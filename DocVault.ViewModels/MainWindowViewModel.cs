@@ -14,14 +14,13 @@ namespace DocVault.ViewModels
 {
     public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly UserSettings _userSettings;
         private readonly DocVaultDbContext _dbContext;
         private readonly FileEncryptionService _fileEncryptionService;
 
         private string _tags;
 
         public ObservableCollection<Document> DocumentsToStore { get; set; } = new();
-        public ObservableCollection<Document> DocumentsThatMatch { get; set; } = new();
+        public ObservableCollection<Document> DocumentsToEncryptThatMatch { get; set; } = new();
         public ObservableCollection<Document> DocumentsAlreadyInStorage { get; set; } = new();
         public string Tags
         {
@@ -38,11 +37,9 @@ namespace DocVault.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainWindowViewModel(UserSettings userSettings,
-                                    DocVaultDbContext dbContext,
-                                   FileEncryptionService fileEncryptionService)
+        public MainWindowViewModel(DocVaultDbContext dbContext,
+            FileEncryptionService fileEncryptionService)
         {
-            _userSettings = userSettings;
             _dbContext = dbContext;
             _fileEncryptionService = fileEncryptionService;
 
@@ -78,7 +75,7 @@ namespace DocVault.ViewModels
                                                    d != document))
                 {
                     // Document matches another in selected files to store list
-                    DocumentsThatMatch.Add(document);
+                    DocumentsToEncryptThatMatch.Add(document);
                 }
                 else
                 {
@@ -89,17 +86,17 @@ namespace DocVault.ViewModels
 
         public void ExcludeMatchingDocument(Document documentToRemove)
         {
-            DocumentsThatMatch.Remove(documentToRemove);
+            DocumentsToEncryptThatMatch.Remove(documentToRemove);
 
             // Check if that cleared any documents to move from
             // DocumentsThatMatch into DocumentsToStore
             List<Document> documentsToMove = new List<Document>();
 
-            foreach (Document document in DocumentsThatMatch)
+            foreach (Document document in DocumentsToEncryptThatMatch)
             {
                 if (DocumentsToStore.None(d => d.FileSize.Equals(document.FileSize) &&
                                                d.Checksum.SequenceEqual(document.Checksum)) &&
-                   DocumentsThatMatch.None(d => d.FileSize.Equals(document.FileSize) &&
+                   DocumentsToEncryptThatMatch.None(d => d.FileSize.Equals(document.FileSize) &&
                                                 d.Checksum.SequenceEqual(document.Checksum) &&
                                                 d != document))
                 {
@@ -109,7 +106,7 @@ namespace DocVault.ViewModels
 
             foreach (Document document in documentsToMove)
             {
-                DocumentsThatMatch.Remove(document);
+                DocumentsToEncryptThatMatch.Remove(document);
                 DocumentsToStore.Add(document);
             }
         }
@@ -184,7 +181,7 @@ namespace DocVault.ViewModels
         private void ClearUIControls()
         {
             DocumentsToStore.Clear();
-            DocumentsThatMatch.Clear();
+            DocumentsToEncryptThatMatch.Clear();
             DocumentsAlreadyInStorage.Clear();
             Tags = "";
         }

@@ -15,8 +15,8 @@ namespace DocVault.WPF
     {
         private const string USER_SETTINGS_FILE_NAME = "UserSettings.json";
 
-        private IServiceProvider _serviceProvider { get; set; }
-        private IConfiguration _configuration { get; set; }
+        private IServiceProvider ServiceProvider { get; set; }
+        private IConfiguration Configuration { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -25,24 +25,24 @@ namespace DocVault.WPF
                           .AddJsonFile("appsettings.json", false, true)
                           .AddUserSecrets<MainWindow>();
 
-            _configuration = builder.Build();
+            Configuration = builder.Build();
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
 
-            _serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
 
             // Startup window
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.ShowDialog();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DocVaultDbContext>
-                (options => options.UseSqlServer(_configuration.GetConnectionString("SqlDatabase")));
+                (options => options.UseSqlServer(Configuration.GetConnectionString("SqlDatabase")));
 
-            var userSettings = GetUserSettings();
+            UserSettings userSettings = GetUserSettings();
 
             services.AddSingleton(new FileEncryptionService(userSettings));
 

@@ -28,7 +28,7 @@ namespace DocVault.WPF
 
             _serviceProvider = serviceProvider;
 
-            DataContext = new MainWindowViewModel(userSettings, dbContext, fileEncryptionService);
+            DataContext = new MainWindowViewModel(dbContext, fileEncryptionService);
         }
 
         private void EnterEncryptionKey_OnClick(object sender, RoutedEventArgs e)
