@@ -19,9 +19,9 @@ namespace DocVault.ViewModels
 
         private string _tags;
 
-        public ObservableCollection<Document> DocumentsToStore { get; set; } = new();
-        public ObservableCollection<Document> DocumentsToEncryptThatMatch { get; set; } = new();
-        public ObservableCollection<Document> DocumentsAlreadyInStorage { get; set; } = new();
+        public ObservableCollection<Document> DocumentsToStore { get; } = new();
+        public ObservableCollection<Document> DocumentsToEncryptThatMatch { get; } = new();
+        public ObservableCollection<Document> DocumentsAlreadyInStorage { get; } = new();
         public string Tags
         {
             get => _tags;

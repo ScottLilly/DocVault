@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +18,7 @@ namespace DocVault.Services
         private byte[] _aesKey;
         private byte[] _aesIV;
 
-        private bool _encryptionKeyIsSet;
-
-        public bool EncryptionKeyIsSet
-        {
-            get => _encryptionKeyIsSet;
-            private set
-            {
-                _encryptionKeyIsSet = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool EncryptionKeyIsSet { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -221,11 +210,6 @@ namespace DocVault.Services
             }
 
             inputFileStream.Close();
-        }
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
