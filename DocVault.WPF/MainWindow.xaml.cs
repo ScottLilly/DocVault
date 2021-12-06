@@ -4,9 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
-using DocVault.DAL;
 using DocVault.Models;
-using DocVault.Services;
 using DocVault.ViewModels;
 using DocVault.WPF.Windows;
 
@@ -20,14 +18,13 @@ namespace DocVault.WPF
             DataContext as DocVaultViewModel;
         
         public MainWindow(IServiceProvider serviceProvider,
-            DocVaultDbContext dbContext,
-            FileEncryptionService fileEncryptionService)
+            DocVaultViewModel docVaultViewModel)
         {
             InitializeComponent();
 
             _serviceProvider = serviceProvider;
 
-            DataContext = new DocVaultViewModel(dbContext, fileEncryptionService);
+            DataContext = docVaultViewModel;
         }
 
         private void EnterEncryptionKey_OnClick(object sender, RoutedEventArgs e)

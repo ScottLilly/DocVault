@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using DocVault.DAL;
 using DocVault.Models;
 using DocVault.Services;
@@ -45,18 +46,19 @@ namespace DocVault.ViewModels
                     {
                         DocumentSelections.Add(new DocumentSelection
                         {
-                            Document = document, IsSelected = false
+                            Document = document, 
+                            IsSelected = false
                         });
                     }
                 }
             }
         }
 
-        public void DecryptSelectedDocuments()
+        public async Task DecryptSelectedDocumentsAsync()
         {
             foreach (DocumentSelection documentSelection in DocumentSelections.Where(ds => ds.IsSelected))
             {
-                _fileEncryptionService.DecryptDocument(documentSelection.Document);
+                await _fileEncryptionService.RetrieveAndDecryptDocument(documentSelection.Document);
             }
 
             DocumentSelections.Clear();

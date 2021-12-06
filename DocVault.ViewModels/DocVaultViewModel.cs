@@ -87,8 +87,8 @@ namespace DocVault.ViewModels
                 if (DocumentsToStore.None(d => d.FileSize.Equals(document.FileSize) &&
                                                d.Checksum.SequenceEqual(document.Checksum)) &&
                    DocumentsToEncryptThatMatch.None(d => d.FileSize.Equals(document.FileSize) &&
-                                                d.Checksum.SequenceEqual(document.Checksum) &&
-                                                d != document))
+                                                         d.Checksum.SequenceEqual(document.Checksum) &&
+                                                         d != document))
                 {
                     documentsToMove.Add(document);
                 }
@@ -109,7 +109,7 @@ namespace DocVault.ViewModels
 
                 await _dbContext.Documents.AddAsync(document);
 
-                await _fileEncryptionService.EncryptDocumentAsync(document);
+                await _fileEncryptionService.EncryptAndStoreDocument(document);
             }
 
             await _dbContext.SaveChangesAsync();

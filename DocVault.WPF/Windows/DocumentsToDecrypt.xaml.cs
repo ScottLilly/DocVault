@@ -1,26 +1,18 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Windows;
-using DocVault.DAL;
-using DocVault.Services;
 using DocVault.ViewModels;
 
 namespace DocVault.WPF.Windows
 {
     public partial class DocumentsToDecrypt : Window
     {
-        private readonly IServiceProvider _serviceProvider;
-
         private DecryptWindowViewModel VM => DataContext as DecryptWindowViewModel;
 
-        public DocumentsToDecrypt(IServiceProvider serviceProvider,
-            DocVaultDbContext dbContext,
-            FileEncryptionService fileEncryptionService)
+        public DocumentsToDecrypt(DecryptWindowViewModel viewModel)
         {
             InitializeComponent();
 
-            _serviceProvider = serviceProvider;
-
-            DataContext = new DecryptWindowViewModel(dbContext, fileEncryptionService);
+            DataContext = viewModel;
         }
 
         private void FindMatchingDocuments_OnClick(object sender, RoutedEventArgs e)
@@ -28,9 +20,9 @@ namespace DocVault.WPF.Windows
             VM.FindMatchingDocuments();
         }
 
-        private void DecryptSelectedDocuments_OnClick(object sender, RoutedEventArgs e)
+        private async Task DecryptSelectedDocuments_OnClick(object sender, RoutedEventArgs e)
         {
-            VM.DecryptSelectedDocuments();
+            await VM.DecryptSelectedDocumentsAsync();
         }
 
         private void Close_OnClick(object sender, RoutedEventArgs e)

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DocVault.DAL;
 using DocVault.Models;
 using DocVault.Services;
+using DocVault.ViewModels;
 using DocVault.WPF.Windows;
 
 namespace DocVault.WPF
@@ -45,11 +46,13 @@ namespace DocVault.WPF
             UserSettings userSettings = GetUserSettings();
 
             services.AddSingleton(new FileEncryptionService(userSettings));
+            services.AddSingleton(typeof(DocVaultViewModel));
 
             services.AddTransient(typeof(EncryptionKeyEntryWindow));
             services.AddTransient(typeof(MainWindow));
             services.AddTransient(typeof(DocumentsToDecrypt));
             services.AddTransient(typeof(AboutWindow));
+            services.AddTransient(typeof(DecryptWindowViewModel));
         }
 
         private UserSettings GetUserSettings()
