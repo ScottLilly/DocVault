@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:DocVault.ViewModels;assembly=DocVault.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+        d:DataContext="{d:DesignInstance viewModels:DocVaultViewModel}"
         FontSize="11pt"
         WindowStartupLocation="CenterScreen"
         Title="DocVault" Height="768" Width="1024">

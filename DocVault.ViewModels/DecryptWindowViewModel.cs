@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using DocVault.DAL;
 using DocVault.Models;
 using DocVault.Services;
@@ -72,14 +70,10 @@ namespace DocVault.ViewModels
             {
                 TagSelections.Add(new TagSelection
                 {
-                    Tag = tag, IsSelected = false
+                    Tag = tag,
+                    IsSelected = false
                 });
             }
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

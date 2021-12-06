@@ -12,32 +12,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DocVault.ViewModels
 {
-    public sealed class MainWindowViewModel : INotifyPropertyChanged
+    public sealed class DocVaultViewModel : INotifyPropertyChanged
     {
         private readonly DocVaultDbContext _dbContext;
         private readonly FileEncryptionService _fileEncryptionService;
 
-        private string _tags;
-
         public ObservableCollection<Document> DocumentsToStore { get; } = new();
         public ObservableCollection<Document> DocumentsToEncryptThatMatch { get; } = new();
         public ObservableCollection<Document> DocumentsAlreadyInStorage { get; } = new();
-        public string Tags
-        {
-            get => _tags;
-            set
-            {
-                _tags = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Tags { get; set; }
 
         public bool HasEncryptionKey =>
             _fileEncryptionService?.EncryptionKeyIsSet ?? false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainWindowViewModel(DocVaultDbContext dbContext,
+        public DocVaultViewModel(DocVaultDbContext dbContext,
             FileEncryptionService fileEncryptionService)
         {
             _dbContext = dbContext;
@@ -120,8 +110,6 @@ namespace DocVault.ViewModels
                 await _dbContext.Documents.AddAsync(document);
 
                 await _fileEncryptionService.EncryptDocumentAsync(document);
-
-                //_fileEncryptionService.DecryptDocument(document);
             }
 
             await _dbContext.SaveChangesAsync();
