@@ -20,7 +20,7 @@ namespace DocVault.WPF.Windows
             VM.FindMatchingDocuments();
         }
 
-        private async Task DecryptSelectedDocuments_OnClick(object sender, RoutedEventArgs e)
+        private async void DecryptSelectedDocuments_OnClick(object sender, RoutedEventArgs e)
         {
             await VM.DecryptSelectedDocumentsAsync();
         }
