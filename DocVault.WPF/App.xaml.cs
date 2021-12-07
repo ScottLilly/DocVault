@@ -52,6 +52,7 @@ namespace DocVault.WPF
             services.AddTransient(typeof(MainWindow));
             services.AddTransient(typeof(DocumentsToDecrypt));
             services.AddTransient(typeof(AboutWindow));
+            services.AddTransient(typeof(Help));
             services.AddTransient(typeof(DecryptWindowViewModel));
         }
 

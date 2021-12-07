@@ -62,7 +62,7 @@
                 HorizontalAlignment="Right"
                 IsDefault="True"
                 Content="OK"
-                Width="100"
+                Width="75"
                 Click="OK_OnClick"/>
         
     </Grid>

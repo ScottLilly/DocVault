@@ -61,6 +61,11 @@ namespace DocVault.WPF
 
         private void ViewHelp_OnClick(object sender, RoutedEventArgs e)
         {
+            Help helpWindow =
+                _serviceProvider.GetRequiredService<Help>();
+            helpWindow.Owner = this;
+
+            helpWindow.Show();
         }
 
         private void AboutDocVault_OnClick(object sender, RoutedEventArgs e)
