@@ -42,9 +42,16 @@
                                         Binding="{Binding Tag.Value}"
                                         Width="*"/>
 
-                    <DataGridCheckBoxColumn Header="Include"
-                                            Binding="{Binding IsSelected}"
-                                            IsThreeState="False"/>
+                    <DataGridTemplateColumn Header="Include?">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          IsChecked="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -79,9 +86,16 @@
                                         Binding="{Binding Document.TagList}"
                                         Width="*"/>
 
-                    <DataGridCheckBoxColumn Header="Decrypt?"
-                                            Binding="{Binding IsSelected}"
-                                            IsThreeState="False"/>
+                    <DataGridTemplateColumn Header="Decrypt?">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          IsChecked="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
 
             </DataGrid>
