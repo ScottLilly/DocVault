@@ -184,6 +184,7 @@
                     Margin="0,10,0,0"
                     Width="175"
                     Content="Store documents"
+                    IsEnabled="{Binding CanStoreTaggedDocuments}"
                     Click="StoreDocuments_OnClickAsync"/>
         </Grid>
 

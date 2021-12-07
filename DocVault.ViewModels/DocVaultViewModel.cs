@@ -25,6 +25,9 @@ namespace DocVault.ViewModels
         public bool HasEncryptionKey =>
             _fileEncryptionService?.EncryptionKeyIsSet ?? false;
 
+        public bool CanStoreTaggedDocuments =>
+            !string.IsNullOrWhiteSpace(Tags) && DocumentsToStore.Count > 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public DocVaultViewModel(DocVaultDbContext dbContext,
