@@ -45,6 +45,7 @@ namespace DocVault.WPF
 
             UserSettings userSettings = GetUserSettings();
 
+            services.AddSingleton(new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME));
             services.AddSingleton(userSettings);
             services.AddSingleton(typeof(FileEncryptionService));
             services.AddSingleton(typeof(DocVaultViewModel));
