@@ -20,12 +20,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" 
-                  Grid.ColumnSpan="2"
+                  Grid.ColumnSpan="3"
                   BorderBrush="#FF000000" BorderThickness="1"
                   Header="Encrypted file location">
 
@@ -47,7 +48,7 @@
                 <TextBox Grid.Row="1" Grid.Column="0"
                          HorizontalAlignment="Left"
                          Width="500"
-                         Text="{Binding UserSettings.EncryptedStorageLocation.URI}"/>
+                         Text="{Binding UserSettings.EncryptedStorageLocation.URI, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <!--<Button Grid.Row="1" Grid.Column="1"
                         Width="75"
                         Content="Select"
@@ -57,7 +58,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="0" 
-                  Grid.ColumnSpan="2"
+                  Grid.ColumnSpan="3"
                   BorderBrush="#FF000000" BorderThickness="1"
                   Header="Decrypted file location">
 
@@ -79,7 +80,7 @@
                 <TextBox Grid.Row="1" Grid.Column="0"
                          HorizontalAlignment="Left"
                          Width="500"
-                         Text="{Binding UserSettings.DecryptedStorageLocation.URI}"/>
+                         Text="{Binding UserSettings.DecryptedStorageLocation.URI, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <!--<Button Grid.Row="1" Grid.Column="1"
                         Width="75"
                         Content="Select"
@@ -94,6 +95,11 @@
                 Content="Save Changes"
                 Click="SaveChanges_OnClick"/>
         <Button Grid.Row="3" Grid.Column="1"
+                HorizontalAlignment="Left"
+                Width="125"
+                Content="Revert Changes"
+                Click="RevertChanges_OnClick"/>
+        <Button Grid.Row="3" Grid.Column="2"
                 HorizontalAlignment="Right"
                 Width="75"
                 Content="Close"

@@ -1,6 +1,8 @@
-﻿namespace DocVault.Models
+﻿using System.ComponentModel;
+
+namespace DocVault.Models
 {
-    public class StorageLocation
+    public class StorageLocation : INotifyPropertyChanged
     {
         public enum LocationType
         {
@@ -12,5 +14,7 @@
 
         public LocationType Type { get; set; }
         public string URI { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
