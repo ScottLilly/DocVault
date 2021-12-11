@@ -59,6 +59,15 @@ namespace DocVault.WPF
             await VM.StoreDocumentsAsync();
         }
 
+        private void UserConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            UserConfiguration userConfiguration =
+                _serviceProvider.GetRequiredService<UserConfiguration>();
+            userConfiguration.Owner = this;
+
+            userConfiguration.ShowDialog();
+        }
+
         private void ViewHelp_OnClick(object sender, RoutedEventArgs e)
         {
             Help helpWindow =

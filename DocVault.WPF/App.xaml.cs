@@ -45,29 +45,37 @@ namespace DocVault.WPF
 
             UserSettings userSettings = GetUserSettings();
 
-            services.AddSingleton(new FileEncryptionService(userSettings));
+            services.AddSingleton(userSettings);
+            services.AddSingleton(typeof(FileEncryptionService));
             services.AddSingleton(typeof(DocVaultViewModel));
 
+            services.AddTransient(typeof(UserConfiguration));
             services.AddTransient(typeof(EncryptionKeyEntryWindow));
             services.AddTransient(typeof(MainWindow));
             services.AddTransient(typeof(DocumentsToDecrypt));
             services.AddTransient(typeof(AboutWindow));
             services.AddTransient(typeof(Help));
             services.AddTransient(typeof(DecryptWindowViewModel));
+            services.AddTransient(typeof(UserConfigurationViewModel));
         }
 
         private UserSettings GetUserSettings()
         {
-            var settingsManager = 
+            var settingsManager =
                 new SettingsManager<UserSettings>(USER_SETTINGS_FILE_NAME);
 
-            if (File.Exists(USER_SETTINGS_FILE_NAME))
+            UserSettings userSettings = settingsManager.LoadSettings();
+
+            if (userSettings != null &&
+                userSettings.EncryptedStorageLocation != null &&
+                userSettings.DecryptedStorageLocation != null)
             {
-                 return settingsManager.LoadSettings();
+                return userSettings;
             }
 
+            // Uninitialized settings, populate with default values
             // TODO: Choose better default locations
-            var userSettings = new UserSettings
+            userSettings = new UserSettings
             {
                 EncryptedStorageLocation = new StorageLocation
                 {
