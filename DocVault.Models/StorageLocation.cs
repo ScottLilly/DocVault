@@ -16,5 +16,11 @@ namespace DocVault.Models
         public string URI { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public StorageLocation(LocationType type, string uri)
+        {
+            Type = type;
+            URI = uri;
+        }
     }
 }

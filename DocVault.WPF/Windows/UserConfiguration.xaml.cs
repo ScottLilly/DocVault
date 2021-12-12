@@ -22,19 +22,15 @@ namespace DocVault.WPF.Windows
         {
         }
 
+        private void Revert_OnClick(object sender, RoutedEventArgs e)
+        {
+            VM.Revert();
+        }
+
         private void SaveChanges_OnClick(object sender, RoutedEventArgs e)
         {
-            VM.SaveSettings();
-        }
+            VM.SaveChanges();
 
-        private void RevertChanges_OnClick(object sender, RoutedEventArgs e)
-        {
-            VM.RevertChanges();
-        }
-
-        private void Close_OnClick(object sender, RoutedEventArgs e)
-        {
-            // TODO: Add IsDirty check for unsaved changes
             Close();
         }
     }
