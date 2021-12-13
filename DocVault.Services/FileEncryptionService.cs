@@ -10,9 +10,11 @@ namespace DocVault.Services
     public sealed class FileEncryptionService : INotifyPropertyChanged
     {
         private readonly UserSettings _userSettings;
-        private byte[] _passwordBytes;
+        
+        private byte[] PasswordBytes { get; set; }
 
-        public bool EncryptionKeyIsSet { get; private set; }
+        public bool EncryptionKeyIsSet => 
+            PasswordBytes is {Length: > 0};
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,9 +25,7 @@ namespace DocVault.Services
 
         public void SetUserEncryptionKey(string encryptionKey)
         {
-            _passwordBytes = Encoding.ASCII.GetBytes(encryptionKey);
-
-            EncryptionKeyIsSet = !string.IsNullOrWhiteSpace(encryptionKey);
+            PasswordBytes = Encoding.ASCII.GetBytes(encryptionKey);
         }
 
         public async Task EncryptAndStoreDocument(Document document)
@@ -34,7 +34,7 @@ namespace DocVault.Services
             aes.KeySize = 256;
             aes.BlockSize = 128;
 
-            var key = new Rfc2898DeriveBytes(_passwordBytes, document.Salt, 1000);
+            var key = new Rfc2898DeriveBytes(PasswordBytes, document.Salt, 1000);
             aes.Key = key.GetBytes(aes.KeySize / 8);
             aes.IV = key.GetBytes(aes.BlockSize / 8);
 
@@ -84,7 +84,7 @@ namespace DocVault.Services
             aes.KeySize = 256;
             aes.BlockSize = 128;
 
-            var key = new Rfc2898DeriveBytes(_passwordBytes, document.Salt, 1000);
+            var key = new Rfc2898DeriveBytes(PasswordBytes, document.Salt, 1000);
             aes.Key = key.GetBytes(aes.KeySize / 8);
             aes.IV = key.GetBytes(aes.BlockSize / 8);
 
