@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,7 +57,20 @@ namespace DocVault.WPF
 
         private async void StoreDocuments_OnClickAsync(object sender, RoutedEventArgs e)
         {
+            var documents = VM.DocumentsToStore.Select(d => d.FileInfo).ToList();
+
             await VM.StoreDocumentsAsync();
+
+            YesNo yesNoWindow =
+                new YesNo("Delete Documents", "Do you want to delete the encrypted documents?");
+            yesNoWindow.Owner = this;
+
+            yesNoWindow.ShowDialog();
+
+            if (yesNoWindow.Response)
+            {
+                VM.DeleteOriginalFiles(documents);
+            }
         }
 
         private void UserConfiguration_OnClick(object sender, RoutedEventArgs e)

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using DocVault.ViewModels;
 
 namespace DocVault.WPF.Windows

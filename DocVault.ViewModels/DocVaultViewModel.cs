@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -118,6 +119,14 @@ namespace DocVault.ViewModels
             await _dbContext.SaveChangesAsync();
 
             ClearUIControls();
+        }
+
+        public void DeleteOriginalFiles(IEnumerable<FileInfo> documents)
+        {
+            foreach (FileInfo document in documents)
+            {
+                File.Delete(document.FullName);
+            }
         }
 
         #region Private functions
