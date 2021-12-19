@@ -18,12 +18,26 @@ namespace DocVault.ViewModels
         public StorageLocation.LocationType NewDecryptedLocationType { get; set; }
         public string NewDecryptedLocationURI { get; set; }
 
-        public bool EncryptedFileLocationChanged =>
-            !_savedUserSettings.EncryptedStorageLocation.URI.Trim().Equals(NewEncryptedLocationURI.Trim(),
+        public bool HasNoChanges =>
+            EncryptedFileLocationIsUnchanged && DecryptedFileLocationIsUnchanged;
+
+        public bool EncryptedFileLocationIsUnchanged =>
+            _savedUserSettings.EncryptedStorageLocation.URI.Trim().Equals(NewEncryptedLocationURI.Trim(),
                 StringComparison.InvariantCultureIgnoreCase);
+        public bool DecryptedFileLocationIsUnchanged =>
+            _savedUserSettings.DecryptedStorageLocation.URI.Trim().Equals(NewDecryptedLocationURI.Trim(),
+                StringComparison.InvariantCultureIgnoreCase);
+        public bool EncryptedFileLocationChanged => !EncryptedFileLocationIsUnchanged;
+        public bool DecryptedFileLocationChanged => !DecryptedFileLocationIsUnchanged;
 
         private DirectoryInfo EncryptedFilesDirectoryInfo =>
             new DirectoryInfo(_savedUserSettings.EncryptedStorageLocation.URI);
+        private DirectoryInfo NewEncryptedFilesDirectoryInfo =>
+            new DirectoryInfo(NewEncryptedLocationURI);
+
+        public bool NewEncryptedLocationExists => NewEncryptedFilesDirectoryInfo.Exists;
+        public long NewEncryptedLocationExistingFiles =>
+            NewEncryptedLocationExists ? NewEncryptedFilesDirectoryInfo.GetFiles().Length : 0;
 
         public int EncryptedFilesCount =>
             EncryptedFilesDirectoryInfo.GetFiles().Length;
@@ -70,7 +84,24 @@ namespace DocVault.ViewModels
 
         public void MoveEncryptedFiles()
         {
-            Directory.Move(_savedUserSettings.EncryptedStorageLocation.URI, NewEncryptedLocationURI);
+            if (NewEncryptedLocationExists)
+            {
+                foreach (string file in Directory.EnumerateFiles(_savedUserSettings.EncryptedStorageLocation.URI))
+                {
+                    string destinationFile =
+                        Path.Combine(NewEncryptedLocationURI, Path.GetFileName(file));
+
+                    // TODO: See issue to check that files doesn't already exist in new EncryptedLocation
+                    if (!File.Exists(destinationFile))
+                    {
+                        File.Move(file, destinationFile);
+                    }
+                }
+            }
+            else
+            {
+                Directory.Move(_savedUserSettings.EncryptedStorageLocation.URI, NewEncryptedLocationURI);
+            }
         }
     }
 }

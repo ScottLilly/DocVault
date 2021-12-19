@@ -30,30 +30,76 @@ namespace DocVault.WPF.Windows
 
         private void SaveChanges_OnClick(object sender, RoutedEventArgs e)
         {
-            if (VM.EncryptedFileLocationChanged)
+            if (VM.HasNoChanges)
             {
-                YesNo yesNoWindow =
-                    new YesNo("Move Existing Documents", new List<string>
+                Close();
+            }
+
+            // No additional check needed, if only change is DecryptedLocation
+            if (VM.EncryptedFileLocationIsUnchanged)
+            {
+                VM.SaveChanges();
+                Close();
+            }
+
+            // EncryptedLocation has changed, so do additional checks
+
+            // EncryptedLocation property is not null/empty
+            // TODO: Popup warning and remain on UserConfiguration window
+            // Maybe do in textbox in the UI
+
+            // New EncryptedLocation does not already exist and have files
+            if (VM.NewEncryptedLocationExists && VM.NewEncryptedLocationExistingFiles > 0)
+            {
+                YesNo useExistingDirectory =
+                    new YesNo("Use Existing Directory", new List<string>
                     {
-                        "Do you want to move the existing files?",
-                        $"{VM.EncryptedFilesCount} files",
-                        $"{VM.FormattedEncryptedFileSize} in total size"
+                        $"The directory '{VM.NewEncryptedLocationURI}' already exists.",
+                        $"{VM.NewEncryptedLocationExistingFiles} files",
+                        "Are you sure you want to use it?"
                     });
-                yesNoWindow.Owner = this;
 
-                yesNoWindow.ShowDialog();
+                useExistingDirectory.Owner = this;
 
-                if (yesNoWindow.Response)
+                useExistingDirectory.ShowDialog();
+
+                if (!useExistingDirectory.Response)
                 {
-                    VM.MoveEncryptedFiles();
-                    VM.SaveChanges();
-                    Close();
+                    return;
                 }
-                else
+            }
+
+            // No encrypted files to move, allow change to EncryptedLocation
+            if (VM.EncryptedFilesCount == 0)
+            {
+                VM.SaveChanges();
+                Close();
+            }
+
+            // Notify user files will be moved
+            // Don't allow user to change EncryptedLocation without moving existing files.
+
+            YesNo yesNoWindow =
+                new YesNo("Move Existing Documents", new List<string>
                 {
-                    // Don't allow change to EncryptedLocation without moving existing encrypted files.
-                    VM.Revert();
-                }
+                    "Do you want to move the existing files?",
+                    $"{VM.EncryptedFilesCount} files",
+                    $"{VM.FormattedEncryptedFileSize} in total size"
+                });
+            yesNoWindow.Owner = this;
+
+            yesNoWindow.ShowDialog();
+
+            if (yesNoWindow.Response)
+            {
+                VM.MoveEncryptedFiles();
+                VM.SaveChanges();
+                Close();
+            }
+            else
+            {
+                // Don't allow change to EncryptedLocation without moving existing encrypted files.
+                VM.Revert();
             }
         }
     }
