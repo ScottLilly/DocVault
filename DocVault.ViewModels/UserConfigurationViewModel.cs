@@ -67,5 +67,10 @@ namespace DocVault.ViewModels
 
             _savedUserSettings = _settingsManager.LoadSettings();
         }
+
+        public void MoveEncryptedFiles()
+        {
+            Directory.Move(_savedUserSettings.EncryptedStorageLocation.URI, NewEncryptedLocationURI);
+        }
     }
 }

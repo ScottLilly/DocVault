@@ -45,13 +45,16 @@ namespace DocVault.WPF.Windows
 
                 if (yesNoWindow.Response)
                 {
-
+                    VM.MoveEncryptedFiles();
+                    VM.SaveChanges();
+                    Close();
+                }
+                else
+                {
+                    // Don't allow change to EncryptedLocation without moving existing encrypted files.
+                    VM.Revert();
                 }
             }
-
-            VM.SaveChanges();
-
-            Close();
         }
     }
 }
