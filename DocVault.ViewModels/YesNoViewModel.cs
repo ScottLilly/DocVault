@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace DocVault.ViewModels
 {
@@ -14,6 +16,12 @@ namespace DocVault.ViewModels
         {
             Title = title;
             Question = question;
+        }
+
+        public YesNoViewModel(string title, List<string> question)
+        {
+            Title = title;
+            Question = string.Join(Environment.NewLine, question);
         }
     }
 }

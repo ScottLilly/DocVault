@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using DocVault.ViewModels;
 
 namespace DocVault.WPF.Windows
@@ -29,6 +30,25 @@ namespace DocVault.WPF.Windows
 
         private void SaveChanges_OnClick(object sender, RoutedEventArgs e)
         {
+            if (VM.EncryptedFileLocationChanged)
+            {
+                YesNo yesNoWindow =
+                    new YesNo("Move Existing Documents", new List<string>
+                    {
+                        "Do you want to move the existing files?",
+                        $"{VM.EncryptedFilesCount} files",
+                        $"{VM.FormattedEncryptedFileSize} in total size"
+                    });
+                yesNoWindow.Owner = this;
+
+                yesNoWindow.ShowDialog();
+
+                if (yesNoWindow.Response)
+                {
+
+                }
+            }
+
             VM.SaveChanges();
 
             Close();

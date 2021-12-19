@@ -10,7 +10,8 @@
         WindowStartupLocation="CenterOwner"
         Title="{Binding Title}" 
         FontSize="11pt"
-        Height="150" Width="250">
+        SizeToContent="WidthAndHeight"
+        MinHeight="150" MinWidth="250">
 
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>

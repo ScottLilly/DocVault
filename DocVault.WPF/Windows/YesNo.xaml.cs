@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using DocVault.ViewModels;
 
 namespace DocVault.WPF.Windows
@@ -10,6 +11,13 @@ namespace DocVault.WPF.Windows
         public bool Response => VM.Response;
 
         public YesNo(string title, string question)
+        {
+            InitializeComponent();
+
+            DataContext = new YesNoViewModel(title, question);
+        }
+
+        public YesNo(string title, List<string> question)
         {
             InitializeComponent();
 
