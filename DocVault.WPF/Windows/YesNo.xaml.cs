@@ -8,7 +8,7 @@ namespace DocVault.WPF.Windows
     {
         private YesNoViewModel VM => DataContext as YesNoViewModel;
 
-        public bool Response => VM.Response;
+        public bool ResponseIsYes => VM.Response;
 
         public YesNo(string title, string question)
         {

@@ -67,7 +67,7 @@ namespace DocVault.WPF
 
             yesNoWindow.ShowDialog();
 
-            if (yesNoWindow.Response)
+            if (yesNoWindow.ResponseIsYes)
             {
                 VM.DeleteOriginalFiles(documents);
             }
