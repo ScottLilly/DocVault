@@ -25,7 +25,7 @@ namespace DocVault.WPF.Windows
 
         private void Revert_OnClick(object sender, RoutedEventArgs e)
         {
-            VM.Revert();
+            VM.SetEditingValuesToSavedValues();
         }
 
         private void SaveChanges_OnClick(object sender, RoutedEventArgs e)
@@ -104,7 +104,7 @@ namespace DocVault.WPF.Windows
             else
             {
                 // Don't allow change to EncryptedLocation without moving existing encrypted files.
-                VM.Revert();
+                VM.SetEditingValuesToSavedValues();
             }
         }
     }

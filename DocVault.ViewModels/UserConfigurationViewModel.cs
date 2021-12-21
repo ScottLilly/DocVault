@@ -58,11 +58,10 @@ namespace DocVault.ViewModels
             _settingsManager = settingsManager;
             _savedUserSettings = userSettings;
 
-            // On startup, set new editable values from currently-saved values
-            Revert();
+            SetEditingValuesToSavedValues();
         }
 
-        public void Revert()
+        public void SetEditingValuesToSavedValues()
         {
             NewEncryptedLocationType = _savedUserSettings.EncryptedStorageLocation.Type;
             NewEncryptedLocationURI = _savedUserSettings.EncryptedStorageLocation.URI;
