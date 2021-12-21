@@ -44,11 +44,14 @@ namespace DocVault.ViewModels
         public long EncryptedFilesSize =>
             EncryptedFilesDirectoryInfo.GetFiles().Sum(f => f.Length);
 
-        public string FormattedEncryptedFileSize =>
+        public string FormattedEncryptedFilesSize =>
             EncryptedFilesSize < 1000 ? $"{EncryptedFilesSize} bytes" :
             EncryptedFilesSize < 1000000 ? $"{EncryptedFilesSize / 1000:N1} KBs" :
             EncryptedFilesSize < 1000000000 ? $"{EncryptedFilesSize / 1000000:N1} MBs" :
             $"{EncryptedFilesSize / 1000000000:N1} GB";
+
+        public long NewEncryptedLocationAvailableSpace => 
+            FileService.SpaceAvailable(NewEncryptedLocationURI);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -96,6 +99,8 @@ namespace DocVault.ViewModels
                         File.Move(file, destinationFile);
                     }
                 }
+
+                Directory.Delete(_savedUserSettings.EncryptedStorageLocation.URI, true);
             }
             else
             {

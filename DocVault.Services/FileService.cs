@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using DocVault.Models;
 
@@ -18,6 +19,15 @@ namespace DocVault.Services
         {
             CreateDirectoryIfMissing(userSettings.EncryptedStorageLocation.URI);
             CreateDirectoryIfMissing(userSettings.DecryptedStorageLocation.URI);
+        }
+
+        public static long SpaceAvailable(string path)
+        {
+            FileInfo file = new FileInfo(path);
+
+            DriveInfo drive = new DriveInfo(file.Directory.Root.FullName);
+
+            return drive.AvailableFreeSpace;
         }
 
         private static void CreateDirectoryIfMissing(string path)

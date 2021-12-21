@@ -8,7 +8,7 @@ namespace DocVault.ViewModels
     {
         public string Title { get; }
         public string Question { get; }
-        public bool Response { get; set; }
+        public bool ResponseIsYes { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

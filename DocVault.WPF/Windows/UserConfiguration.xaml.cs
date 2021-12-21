@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using DocVault.Services;
 using DocVault.ViewModels;
 
 namespace DocVault.WPF.Windows
@@ -83,6 +84,24 @@ namespace DocVault.WPF.Windows
             }
             else
             {
+                // Show message and do not continue
+                // if NewEncryptedLocation does not have enough available disk space for files.
+                if (VM.EncryptedFilesSize > VM.NewEncryptedLocationAvailableSpace)
+                {
+                    OK notEnoughDiskSpace =
+                        new OK("Move Existing Files", new List<string>
+                        {
+                            "Do you want to move the existing files?",
+                            $"{VM.EncryptedFilesCount} files",
+                            $"{VM.FormattedEncryptedFilesSize} in files"
+                        });
+                    notEnoughDiskSpace.Owner = this;
+
+                    notEnoughDiskSpace.ShowDialog();
+
+                    return;
+                }
+
                 // Notify user files will be moved
                 // Don't allow user to change EncryptedLocation without moving existing files.
                 YesNo moveExistingFiles =
@@ -90,7 +109,7 @@ namespace DocVault.WPF.Windows
                     {
                         "Do you want to move the existing files?",
                         $"{VM.EncryptedFilesCount} files",
-                        $"{VM.FormattedEncryptedFileSize} in total size"
+                        $"{VM.FormattedEncryptedFilesSize} in total size"
                     });
                 moveExistingFiles.Owner = this;
 

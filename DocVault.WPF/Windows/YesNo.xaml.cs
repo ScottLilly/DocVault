@@ -8,7 +8,7 @@ namespace DocVault.WPF.Windows
     {
         private YesNoViewModel VM => DataContext as YesNoViewModel;
 
-        public bool ResponseIsYes => VM.Response;
+        public bool ResponseIsYes => VM.ResponseIsYes;
 
         public YesNo(string title, string question)
         {
@@ -26,14 +26,14 @@ namespace DocVault.WPF.Windows
 
         private void No_OnClick(object sender, RoutedEventArgs e)
         {
-            VM.Response = false;
+            VM.ResponseIsYes = false;
 
             Close();
         }
 
         private void Yes_OnClick(object sender, RoutedEventArgs e)
         {
-            VM.Response = true;
+            VM.ResponseIsYes = true;
 
             Close();
         }
