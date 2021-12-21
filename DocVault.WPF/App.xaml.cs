@@ -73,12 +73,15 @@ namespace DocVault.WPF
             }
 
             // Uninitialized settings, populate with default values
-            userSettings = 
+            userSettings =
                 new UserSettings(
-                    new StorageLocation(StorageLocation.LocationType.LocalDisk, @"\EncryptedDocuments"),
-                    new StorageLocation(StorageLocation.LocationType.LocalDisk, @"\DecryptedDocuments"));
+                    new StorageLocation(StorageLocation.LocationType.LocalDisk, @"\DocVaultEncryptedDocuments"),
+                    new StorageLocation(StorageLocation.LocationType.LocalDisk, @"\DocVaultDecryptedDocuments"));
 
             settingsManager.SaveSettings(userSettings);
+
+            Directory.CreateDirectory(userSettings.EncryptedStorageLocation.URI);
+            Directory.CreateDirectory(userSettings.DecryptedStorageLocation.URI);
 
             return userSettings;
         }

@@ -81,30 +81,32 @@ namespace DocVault.WPF.Windows
                 VM.SaveChanges();
                 Close();
             }
-
-            // Notify user files will be moved
-            // Don't allow user to change EncryptedLocation without moving existing files.
-            YesNo moveExistingFiles =
-                new YesNo("Move Existing Files", new List<string>
-                {
-                    "Do you want to move the existing files?",
-                    $"{VM.EncryptedFilesCount} files",
-                    $"{VM.FormattedEncryptedFileSize} in total size"
-                });
-            moveExistingFiles.Owner = this;
-
-            moveExistingFiles.ShowDialog();
-
-            if (moveExistingFiles.ResponseIsYes)
-            {
-                VM.MoveEncryptedFiles();
-                VM.SaveChanges();
-                Close();
-            }
             else
             {
-                // Don't allow change to EncryptedLocation without moving existing encrypted files.
-                VM.SetEditingValuesToSavedValues();
+                // Notify user files will be moved
+                // Don't allow user to change EncryptedLocation without moving existing files.
+                YesNo moveExistingFiles =
+                    new YesNo("Move Existing Files", new List<string>
+                    {
+                        "Do you want to move the existing files?",
+                        $"{VM.EncryptedFilesCount} files",
+                        $"{VM.FormattedEncryptedFileSize} in total size"
+                    });
+                moveExistingFiles.Owner = this;
+
+                moveExistingFiles.ShowDialog();
+
+                if (moveExistingFiles.ResponseIsYes)
+                {
+                    VM.MoveEncryptedFiles();
+                    VM.SaveChanges();
+                    Close();
+                }
+                else
+                {
+                    // Don't allow change to EncryptedLocation without moving existing encrypted files.
+                    VM.SetEditingValuesToSavedValues();
+                }
             }
         }
     }
