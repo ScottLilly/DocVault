@@ -51,9 +51,9 @@
         <TextBlock Grid.Row="5" Grid.Column="0" 
                    Text="Support page:"/>
         <TextBlock Grid.Row="5" Grid.Column="1" >
-            <Hyperlink NavigateUri="https://scottlilly.com"
+            <Hyperlink NavigateUri="https://scottlilly.com/docvault-project/"
                        RequestNavigate="Hyperlink_OnRequestNavigate">
-                https://scottlilly.com
+                https://scottlilly.com/docvault-project/
             </Hyperlink>
         </TextBlock>
 
